@@ -1,0 +1,124 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Quiztador API
+# during dev, should point to your local machine
+host: 192.168.0.101
+# basePath prefixes all resource paths
+basePath: svcourse2018/api
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+
+securityDefinitions:
+  UserAuthentication:
+    type: apiKey
+    in: header
+    name: Authorization
+
+paths:
+
+  # Users controller
+  /users:
+    # Controller file name
+    x-swagger-router-controller: UsersController.php
+    # http method
+    get:
+      # method defined in the controller
+      operationId: get
+      description: Get the authenticated user's details
+      # This means that this route needs authentication
+      security:
+        - UserAuthentication: [] # Uses the UserAuthentication method defined in securityDefinitions
+      responses:
+        # Http response code 200
+        200:
+          description: Success response
+          # Description of the JSON response
+          schema:
+            type: object
+            properties:
+              username:
+                description: Unique user name
+                type: string
+                minLength: 4
+                maxLength: 20
+        400:
+          description: Bad request, usually validation errors
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Internal server error, the server made buba
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+    # http method
+    post:
+      # method defined in the controller
+      operationId: create
+      description: Create a new user
+      responses:
+        # Http response code 200
+        200:
+          description: Success response
+          # Description of the JSON response
+          schema:
+            type: object
+            properties:
+              authorizationToken:
+                description: Authorization token used to authenticate the request
+                type: string
+        400:
+          description: Bad request, usually validation errors
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Internal server error, the server made buba
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+
+  # Users controller
+  /users/login:
+    # Controller file name
+    x-swagger-router-controller: UsersLoginController.php
+    # http method
+    post:
+      # method defined in the controller
+      operationId: create
+      description: Create a new login session and return the authorization token
+      responses:
+        # Http response code 200
+        200:
+          description: Success response
+          # Description of the JSON response
+          schema:
+            type: object
+            properties:
+              authorizationToken:
+                description: Authorization token used to authenticate the request
+                type: string
+        400:
+          description: Bad request, usually validation errors
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+        500:
+          description: Internal server error, the server made buba
+          schema:
+            $ref: '#/definitions/ErrorResponse'
+
+# complex objects have schema definitions
+definitions:
+  ErrorResponse:
+    required:
+      - errorMessage
+      - errorCode
+    properties:
+      errorMessage:
+        description: Error description
+        type: string
+      errorCode:
+        description: Error unique identifier
+        type: integer
