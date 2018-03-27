@@ -8,7 +8,11 @@
 
 namespace Course\Api\Controllers;
 
-
+/**
+ * Contains definitions for error codes returned in the response
+ * Class ErrorCodes
+ * @package Course\Api\Controllers
+ */
 class ErrorCodes
 {
     const GENERIC_ERROR      = 1;

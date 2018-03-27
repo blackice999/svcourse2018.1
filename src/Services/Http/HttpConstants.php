@@ -1,14 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 3/11/2017
- * Time: 4:27 PM
- */
 
 namespace Course\Services\Http;
 
-
+/**
+ * Class HttpConstants
+ * Contains definitions of HTTP methods and status codes
+ * @package Course\Services\Http
+ */
 class HttpConstants
 {
     const METHOD_GET = 'GET';

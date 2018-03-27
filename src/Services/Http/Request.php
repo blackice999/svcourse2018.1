@@ -1,41 +1,52 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 3/11/2017
- * Time: 4:35 PM
- */
 
 namespace Course\Services\Http;
 
 use Course\Api\Controllers\ErrorCodes;
+use Course\Api\Exceptions\Precondition;
 use Course\Api\Model\UserModel;
 use Course\Services\Http\Exceptions\HttpException;
 use Course\Services\Utils\Exceptions\DecryptException;
 use Course\Services\Utils\StringUtils;
 
+/**
+ * Class Request
+ * Contains helper functions to handle requests
+ * @package Course\Services\Http
+ */
 class Request
 {
+    /**
+     * Get the raw body and decode it from a json string
+     * @return array|object
+     * @throws \Course\Api\Exceptions\PreconditionException
+     */
     public static function getJsonBody()
     {
         $rawBody = file_get_contents("php://input");
-        return json_decode($rawBody);
+        Precondition::isNotEmpty($rawBody, 'rawBody');
+        $decodedBody = @json_decode($rawBody);
+        Precondition::isNotEmpty($decodedBody, 'decodedBody');
+        return json_decode($decodedBody);
     }
 
     /**
-     * Get header value by key
+     * Get a http header value by it's name
      *
-     * @param string $key
+     * @param string $headerName - Header name
      *
-     * @return string
+     * @return string - header value
      * @throws HttpException
      */
-    public static function getHeader(string $key): string
+    public static function getHeader(string $headerName): string
     {
-        $headerKey = 'HTTP_' . strtoupper($key);
-
+        $headerNameUpperCase = strtoupper($headerName);
+        $headerKey = "HTTP_$headerNameUpperCase";
+        // Headers will be stored in the superglobal $_SERVER
+        // @see http://php.net/manual/ro/language.variables.superglobals.php
+        // @see http://php.net/manual/ro/reserved.variables.server.php
         if (!isset($_SERVER[$headerKey])) {
-            throw new HttpException('Header with key ' . $key .' is missing', ErrorCodes::BAD_REQUEST);
+            throw new HttpException("Header with key $headerName is missing", ErrorCodes::BAD_REQUEST);
         }
 
         return $_SERVER[$headerKey];
