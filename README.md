@@ -32,5 +32,5 @@ The framework is a minimalistic [MVC](https://www.tutorialspoint.com/design_patt
     * **Models** - contains business logic related classes, the ActiveRecord model (see [Active Record Pattern](https://en.wikipedia.org/wiki/Active_record_pattern)), database models
   * **Services** - folder that contains services, helper functions, drivers
     * **Authentication** - contains helper classes that handles generating authentication tokens and checking them
-    * **Http** - contains helper classes to handle requests, responses and HTTP definitions
-    * **Pesistence** - contains the persistence layer, basically drivers that know how to talk to a database or a caching system (see https://stackoverflow.com/questions/16016023/what-is-the-use-of-a-persistence-layer-in-any-application)
+    * **Http** - contains helper classes to handle requests, responses and HTTP definitions (see more about the [Http Protocol](https://code.tutsplus.com/tutorials/http-the-protocol-every-web-developer-must-know-part-1--net-31177)
+    * **Pesistence** - contains the persistence layer, basically drivers that know how to talk to a database or a caching system (see more about the [Active Record Pattern](https://stackoverflow.com/questions/16016023/what-is-the-use-of-a-persistence-layer-in-any-application))
