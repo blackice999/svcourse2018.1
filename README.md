@@ -4,6 +4,7 @@
 * MySql
 * Composer
 * Git
+* An rest client ([Advanced Rest Client](https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo), [Postman](https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop) etc.)
 
 # Instalation
 * If you don't have apache and mysql installed, install xampp https://www.apachefriends.org/ro/index.html
@@ -19,6 +20,8 @@ https://getcomposer.org/download/
 * Change the database configuration from config.php to match your database server configuration
 * Enable apache's mod_rewrite if not already enabled: https://stackoverflow.com/questions/12272731/using-mod-rewrite-with-xampp-and-windows-7-64-bit
 * Access http://localhost/svcourse2018.1 to check if everything is ok
+* Make a POST request with one of the REST clients you chose to http://localhost/svcourse2018.1/users with the body:
+{"username":"test","password":"test12"}
 
 # Documentation:
 The framework is a minimalistic [MVC](https://www.tutorialspoint.com/design_pattern/mvc_pattern.htm) REST API framework
