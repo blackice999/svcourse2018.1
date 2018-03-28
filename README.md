@@ -23,14 +23,14 @@ https://getcomposer.org/download/
 # Documentation:
 The framework is a minimalistic [MVC](https://www.tutorialspoint.com/design_pattern/mvc_pattern.htm) REST API framework
 ## Structure:
-* specs - contains api description in YAML format [OpenApi](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) style
-* sql - contains all the sql files needed to create your database
-  * tables - contains table definitions
-* src - contains all the source code
-  * Api - contains all the API related code
-    * Controllers - contains the controllers to handle the routes, Controller interface and the Router which redirects the request to it's specific controller
-    * Models - contains business logic related classes, the ActiveRecord model (see [Active Record Pattern](https://en.wikipedia.org/wiki/Active_record_pattern)), database models
-  * Services - folder that contains services, helper functions, drivers
-    * *Authentication* - contains helper classes that handles generating authentication tokens and checking them
-    * *Http* - contains helper classes to handle requests, responses and HTTP definitions
-    * *Pesistence* - contains the persistence layer, basically drivers that know how to talk to a database or a caching system (see https://stackoverflow.com/questions/16016023/what-is-the-use-of-a-persistence-layer-in-any-application)
+* **specs** - contains api description in YAML format [OpenApi](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) style
+* **sql** - contains all the sql files needed to create your database
+  * **tables** - contains table definitions
+* **src** - contains all the source code
+  * **Api** - contains all the API related code
+    * **Controllers** - contains the controllers to handle the routes, Controller interface and the Router which redirects the request to it's specific controller
+    * **Models** - contains business logic related classes, the ActiveRecord model (see [Active Record Pattern](https://en.wikipedia.org/wiki/Active_record_pattern)), database models
+  * **Services** - folder that contains services, helper functions, drivers
+    * **Authentication** - contains helper classes that handles generating authentication tokens and checking them
+    * **Http** - contains helper classes to handle requests, responses and HTTP definitions
+    * **Pesistence** - contains the persistence layer, basically drivers that know how to talk to a database or a caching system (see https://stackoverflow.com/questions/16016023/what-is-the-use-of-a-persistence-layer-in-any-application)
