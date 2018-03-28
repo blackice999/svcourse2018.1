@@ -1,16 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 3/11/2017
- * Time: 5:43 PM
- */
 
 namespace Course\Services\Http\Exceptions;
 
 use Course\Api\Exceptions\ApiException;
 use Course\Services\Http\Response;
 
+/**
+ * Class HttpException
+ * Exception thrown when we want to display an HTTP error with an http status and message
+ * @package Course\Services\Http\Exceptions
+ */
 class HttpException extends ApiException
 {
     public function __construct(string $message, int $code)

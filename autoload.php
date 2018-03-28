@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 3/11/2017
- * Time: 6:22 PM
- */
 
 define('BASE_PATH', realpath(dirname(__FILE__)));
 

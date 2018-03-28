@@ -1,57 +1,73 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 3/11/2017
- * Time: 4:35 PM
- */
 
 namespace Course\Services\Http;
 
 use Course\Api\Controllers\ErrorCodes;
+use Course\Api\Exceptions\Precondition;
 use Course\Api\Model\UserModel;
 use Course\Services\Http\Exceptions\HttpException;
-use Course\Services\Utils\Exceptions\DecryptException;
-use Course\Services\Utils\StringUtils;
+use Course\Services\Authentication\Exceptions\DecryptException;
+use Course\Services\Authentication\Authentication;
 
+/**
+ * Class Request
+ * Contains helper functions to handle requests
+ * @package Course\Services\Http
+ */
 class Request
 {
+    /**
+     * Get the raw body and decode it from a json string
+     * @return array|object
+     * @throws \Course\Api\Exceptions\PreconditionException
+     */
     public static function getJsonBody()
     {
         $rawBody = file_get_contents("php://input");
-        return json_decode($rawBody);
+        Precondition::isNotEmpty($rawBody, 'rawBody');
+        $decodedBody = @json_decode($rawBody);
+        Precondition::isNotEmpty($decodedBody, 'decodedBody');
+        return $decodedBody;
     }
 
     /**
-     * Get header value by key
+     * Get a http header value by it's name
      *
-     * @param string $key
+     * @param string $headerName - Header name
      *
-     * @return string
+     * @return string - header value
      * @throws HttpException
      */
-    public static function getHeader(string $key): string
+    public static function getHeader(string $headerName): string
     {
-        $headerKey = 'HTTP_' . strtoupper($key);
-
-        if (!isset($_SERVER[$headerKey])) {
-            throw new HttpException('Header with key ' . $key .' is missing', ErrorCodes::BAD_REQUEST);
+        // Fetch all the request headers
+        $headers = getallheaders();
+        // The headers array will contain lower case array keys so we
+        // need to make sure the given header name is also lower case
+        $headerNameLowerCase = strtolower($headerName);
+        // Check if the header exists otherwise throw an exception
+        if (!isset($headers[$headerNameLowerCase])) {
+            throw new HttpException("Header with key $headerName is missing", ErrorCodes::BAD_REQUEST);
         }
 
-        return $_SERVER[$headerKey];
+        return $headers[$headerNameLowerCase];
     }
 
     /**
+     *
      * @return UserModel
      */
-    public static function getAuthUser(): UserModel
+    public static function getAuthenticatedUser(): UserModel
     {
         try {
+            // fetches the authorization header
             $authToken = self::getHeader('Authorization');
-            $userModel = StringUtils::decryptData($authToken);
+            // decrypts the authorization header and generates an user model
+            $userModel = Authentication::decryptToken($authToken);
 
+            // Generates an error if the decrypted data is not an instance of UserModel
             if (!($userModel instanceof UserModel)) {
-                Response::showBadRequestResponse(ErrorCodes::INVALID_AUTH_TOKEN, 'Invalid auth token');
+                Response::showBadRequestResponse(ErrorCodes::INVALID_AUTH_TOKEN, 'Invalid authentication token');
             }
 
             return $userModel;

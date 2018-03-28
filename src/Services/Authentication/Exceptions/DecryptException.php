@@ -1,5 +1,5 @@
 <?php
-namespace Course\Services\Utils\Exceptions;
+namespace Course\Services\Authentication\Exceptions;
 
 use Course\Api\Exceptions\ApiException;
 

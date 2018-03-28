@@ -1,16 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 3/19/2017
- * Time: 12:00 PM
- */
 
 namespace Course\Services\Persistence\Exceptions;
 
-
 use Course\Api\Exceptions\ApiException;
 
+/**
+ * Class ConnectionException
+ * Thrown when we can't connect to the database
+ * @package Course\Services\Persistence\Exceptions
+ */
 class ConnectionException extends ApiException
 {
 
