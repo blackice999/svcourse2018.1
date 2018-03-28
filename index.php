@@ -1,6 +1,5 @@
 <?php
 include "autoload.php";
-session_start(['cookie_lifetime' => 86400]);
 
 use Course\Api\Controllers\ErrorCodes;
 use Course\Api\Controllers\Router;
@@ -10,7 +9,6 @@ use Course\Services\Http\Response;
 use Course\Services\Http\Exceptions\HttpException;
 
 try {
-
     if (empty($_GET['path'])) {
         throw new HttpException('Bad Request', HttpConstants::STATUS_CODE_BAD_REQUEST);
     }

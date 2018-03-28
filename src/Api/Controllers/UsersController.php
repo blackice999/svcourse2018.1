@@ -15,19 +15,25 @@ use Course\Services\Http\Exceptions\HttpException;
 use Course\Services\Http\HttpConstants;
 use Course\Services\Http\Request;
 use Course\Services\Http\Response;
-use Course\Services\Utils\StringUtils;
+use Course\Services\Authentication\Authentication;
 
 class UsersController implements Controller
 {
+    /**
+     *
+     */
     public function get()
     {
-        $userModel = Request::getAuthUser();
+        $userModel = Request::getAuthenticatedUser();
 
         Response::showSuccessResponse([
             'username' => $userModel->username
         ]);
     }
 
+    /**
+     * @throws PreconditionException
+     */
     public function create()
     {
         $body = Request::getJsonBody();
@@ -43,11 +49,11 @@ class UsersController implements Controller
             Response::showBadRequestResponse(ErrorCodes::USER_CREATE_USERNAME_ALREADY_TAKEN, 'username already taken');
         }
 
-        $password = StringUtils::encryptPassword($body->password);
+        $password = Authentication::encryptPassword($body->password);
         $userModel = UserModel::create($body->username, $password);
 
         Response::showSuccessResponse([
-            'authorizationToken' => StringUtils::encryptData($userModel),
+            'authorizationToken' => Authentication::generateToken($userModel),
         ]);
     }
 

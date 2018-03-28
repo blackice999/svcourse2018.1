@@ -6,8 +6,8 @@ use Course\Api\Controllers\ErrorCodes;
 use Course\Api\Exceptions\Precondition;
 use Course\Api\Model\UserModel;
 use Course\Services\Http\Exceptions\HttpException;
-use Course\Services\Utils\Exceptions\DecryptException;
-use Course\Services\Utils\StringUtils;
+use Course\Services\Authentication\Exceptions\DecryptException;
+use Course\Services\Authentication\Authentication;
 
 /**
  * Class Request
@@ -27,7 +27,7 @@ class Request
         Precondition::isNotEmpty($rawBody, 'rawBody');
         $decodedBody = @json_decode($rawBody);
         Precondition::isNotEmpty($decodedBody, 'decodedBody');
-        return json_decode($decodedBody);
+        return $decodedBody;
     }
 
     /**
@@ -40,29 +40,34 @@ class Request
      */
     public static function getHeader(string $headerName): string
     {
-        $headerNameUpperCase = strtoupper($headerName);
-        $headerKey = "HTTP_$headerNameUpperCase";
-        // Headers will be stored in the superglobal $_SERVER
-        // @see http://php.net/manual/ro/language.variables.superglobals.php
-        // @see http://php.net/manual/ro/reserved.variables.server.php
-        if (!isset($_SERVER[$headerKey])) {
+        // Fetch all the request headers
+        $headers = getallheaders();
+        // The headers array will contain lower case array keys so we
+        // need to make sure the given header name is also lower case
+        $headerNameLowerCase = strtolower($headerName);
+        // Check if the header exists otherwise throw an exception
+        if (!isset($headers[$headerNameLowerCase])) {
             throw new HttpException("Header with key $headerName is missing", ErrorCodes::BAD_REQUEST);
         }
 
-        return $_SERVER[$headerKey];
+        return $headers[$headerNameLowerCase];
     }
 
     /**
+     *
      * @return UserModel
      */
-    public static function getAuthUser(): UserModel
+    public static function getAuthenticatedUser(): UserModel
     {
         try {
+            // fetches the authorization header
             $authToken = self::getHeader('Authorization');
-            $userModel = StringUtils::decryptData($authToken);
+            // decrypts the authorization header and generates an user model
+            $userModel = Authentication::decryptToken($authToken);
 
+            // Generates an error if the decrypted data is not an instance of UserModel
             if (!($userModel instanceof UserModel)) {
-                Response::showBadRequestResponse(ErrorCodes::INVALID_AUTH_TOKEN, 'Invalid auth token');
+                Response::showBadRequestResponse(ErrorCodes::INVALID_AUTH_TOKEN, 'Invalid authentication token');
             }
 
             return $userModel;

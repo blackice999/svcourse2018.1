@@ -1,14 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 3/19/2017
- * Time: 11:55 AM
- */
 
 define('DB_HOST', 'localhost');
 define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_DATABASE_NAME', 'quiztador');
 define('DB_PORT', '3306');
+
+// Encryption stuff
 define('PASSWORD_SALT', 'H^&E#&^HSBDW');
+define('TOKEN_ENCRYPTION_KEY', 'FdqPw2mTdamXDjjxeA3y8Ec8eZ67m2GicuMJSRbmICI=');
+define('TOKEN_ENCRYPTION_IV', 'U6ppaL4k4ECkJtPFASLYCw==');
+define('TOKEN_ENCRYPTION_ALGORITHM', 'aes-256-cbc');

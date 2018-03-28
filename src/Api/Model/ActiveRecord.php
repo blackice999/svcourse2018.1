@@ -61,6 +61,8 @@ abstract class ActiveRecord
     /**
      * Runs an update query and replaces all the current fields
      * with the current active record instance properties
+     * @throws \Course\Services\Persistence\Exceptions\ConnectionException
+     * @throws \Course\Services\Persistence\Exceptions\QueryException
      */
     public function save()
     {

@@ -15,7 +15,7 @@ use Course\Services\Http\Exceptions\HttpException;
 use Course\Services\Http\HttpConstants;
 use Course\Services\Http\Request;
 use Course\Services\Http\Response;
-use Course\Services\Utils\StringUtils;
+use Course\Services\Authentication\Authentication;
 
 class UsersLoginController implements Controller
 {
@@ -27,6 +27,12 @@ class UsersLoginController implements Controller
         throw new HttpException('Method Now Allowed', HttpConstants::STATUS_CODE_METHOD_NOT_ALLOWED);
     }
 
+    /**
+     * @throws PreconditionException
+     * @throws \Course\Services\Persistence\Exceptions\ConnectionException
+     * @throws \Course\Services\Persistence\Exceptions\NoResultsException
+     * @throws \Course\Services\Persistence\Exceptions\QueryException
+     */
     public function create()
     {
         $body = Request::getJsonBody();
@@ -42,18 +48,16 @@ class UsersLoginController implements Controller
             Response::showUnauthorizedResponse();
         }
 
-        $password = StringUtils::encryptPassword($body->password);
+        $password = Authentication::encryptPassword($body->password);
         $userModel = UserModel::loadByUsername($body->username);
 
         if ($userModel->password != $password) {
             Response::showUnauthorizedResponse();
         }
 
-        $_SESSION['userId'] = $userModel->id;
-
         Response::showSuccessResponse([
             'userId' => $userModel->id,
-            'authorizationToken' => StringUtils::encryptData($userModel),
+            'authorizationToken' => Authentication::generateToken($userModel),
         ]);
     }
 

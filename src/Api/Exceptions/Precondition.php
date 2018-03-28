@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Alex
- * Date: 3/11/2017
- * Time: 5:03 PM
- */
 
 namespace Course\Api\Exceptions;
 
@@ -12,6 +6,8 @@ namespace Course\Api\Exceptions;
 class Precondition
 {
     /**
+     * Throws an exception if the given condition fails
+     *
      * @param bool $condition
      * @param string $message
      * @throws PreconditionException
@@ -38,13 +34,15 @@ class Precondition
     }
 
     /**
-     * @param $string
-     * @param $minLength
-     * @param $maxLength
-     * @param $variableName
+     * Checks if a string length is between $minLength and $maxLength and throws an exception if not
+     *
+     * @param string $string - The string we want to evaluate
+     * @param int $minLength - The minimum string length allowed
+     * @param int $maxLength - The maximum string length allowed
+     * @param string $variableName - The name of the variable we're evaluating
      * @throws PreconditionException
      */
-    public static function lengthIsBetween($string, $minLength, $maxLength, $variableName)
+    public static function lengthIsBetween(string $string, int $minLength, int $maxLength, string $variableName)
     {
         $length = strlen($string);
         if (!($length >= $minLength && $length <= $maxLength)) {
@@ -60,22 +58,24 @@ class Precondition
     public static function isPositiveInteger($value, string $variableName)
     {
         if (!is_numeric($value) || $value <= 0) {
-            throw new PreconditionException(
-                $variableName . ' is not positive integer');
+            throw new PreconditionException("$variableName is not positive integer");
         }
     }
 
     /**
-     * @param $value
-     * @param array $valueArray
-     * @param string $variableName
+     * Checks if a given value is in an given array
+     *
+     * @param mixed $value - value that we'll check if it's in the array
+     * @param array $valueArray - the array in which we'll search for $value
+     * @param string $variableName - the variable name we're evaluating
      * @throws PreconditionException
      */
     public static function isInArray($value, array $valueArray, string $variableName)
     {
         if (!in_array($value, $valueArray)) {
-            throw new PreconditionException(
-                $variableName . ' is not in array[' . implode(', ', $valueArray) . ']');
+            // Generated a comma separated values string from an array
+            $arrayAsString = implode(', ', $valueArray);
+            throw new PreconditionException("$variableName is not in array[$arrayAsString]");
         }
     }
 }
