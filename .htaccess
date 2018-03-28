@@ -1,5 +1,8 @@
 RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !-f # if the request url is not a file
-RewriteCond %{REQUEST_FILENAME} !-d # if the request url is not a directory
-RewriteRule ^(.*)$ index.php?path=$1 [NC,L,QSA] # redirect everything else to index.php with path=<requestPath>
+# if the request url is not a file
+RewriteCond %{REQUEST_FILENAME} !-f
+# if the request url is not a directory
+RewriteCond %{REQUEST_FILENAME} !-d
+# redirect everything else to index.php with path=<requestPath>
 # e.g. if request url is localhost/user/login it will be redirected as index.php?path=user/login
+RewriteRule ^(.*)$ index.php?path=$1 [NC,L,QSA]
