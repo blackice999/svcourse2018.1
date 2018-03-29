@@ -61,6 +61,31 @@ class HTMLGenerator
         echo "</form>";
     }
 
+    public static function table($borderWidth, array $headers, array $rowData)
+    {
+
+        echo "<table border='" . $borderWidth . "'>";
+        echo "<tr>";
+        foreach ($headers as $header) {
+            echo "<th>" . $header . "</th>";
+        }
+
+        echo "</tr>";
+
+        foreach ($rowData as $data) {
+            echo "<tr>";
+
+            foreach ($data as $tableCell) {
+                echo "<td>" . $tableCell . "</td>";
+            }
+
+            echo "</tr>";
+        }
+
+        echo "</table>";
+
+    }
+
     public static function tag(string $tagName, string $content, string $class = "", $style = "")
     {
         return "<" . $tagName . " class='" . $class . "' style='" . $style . "'>" . $content . "</" . $tagName . ">";
