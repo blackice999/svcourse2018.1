@@ -3,5 +3,9 @@
     "psr-4": {
       "Course\\": "src/"
     }
+  },
+  "require": {
+    "amphp/amp": "^2.0",
+    "amphp/socket": "^0.10.8"
   }
 }

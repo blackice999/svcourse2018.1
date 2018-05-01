@@ -78,4 +78,19 @@ class Precondition
             throw new PreconditionException("$variableName is not in array[$arrayAsString]");
         }
     }
+
+    /**
+     * Checks if a given value is in an given array
+     *
+     * @param \stdClass $object
+     * @param string $property
+     * @param string $variableName - the variable name we're evaluating
+     * @throws PreconditionException
+     */
+    public static function propertyExists(\stdClass $object, string $property, string $variableName)
+    {
+        if (!property_exists($object, $property)) {
+            throw new PreconditionException("$variableName does not have property [$property]");
+        }
+    }
 }
