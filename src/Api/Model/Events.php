@@ -22,11 +22,9 @@ class Events
      */
     public static function getEvent($data)
     {
-        $explode = explode(':', $data, 2);
-        if (count($explode) !== 2) {
-            throw new ApiException('socket message should be in this form event:jsonBody');
-        }
-        list($eventType, $jsonBody) = $explode;
+        $jsonBody = self::getJsonBody($data);
+        $eventType = self::getEventType($data);
+
         var_dump($eventType);
         Precondition::isInArray($eventType, self::ALLOWED_EVENTS, 'eventType');
         $decodedBody = @json_decode($jsonBody);
@@ -38,5 +36,25 @@ class Events
             throw new ApiException("method handle doesn't exist for event $eventType");
         }
         return $event->handle();
+    }
+
+    public static function getJsonBody($data)
+    {
+        $explode = explode(':', $data, 2);
+        if (count($explode) !== 2) {
+            throw new ApiException('socket message should be in this form event:jsonBody');
+        }
+        $jsonBody = $explode[1];
+        return @json_decode($jsonBody);
+    }
+
+    public static function getEventType($data)
+    {
+        $explode = explode(':', $data, 2);
+        if (count($explode) !== 2) {
+            throw new ApiException('socket message should be in this form event:jsonBody');
+        }
+        $eventType = $explode[0];
+        return @json_decode($eventType);
     }
 }

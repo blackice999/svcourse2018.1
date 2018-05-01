@@ -11,7 +11,7 @@ class Response
 {
     const END_OF_RESPONSE = "\n";
 
-    public function getResponse($eventName, $jsonBody)
+    public static function getResponse($eventName, $jsonBody)
     {
         return "$eventName:$jsonBody" . self::END_OF_RESPONSE;
     }

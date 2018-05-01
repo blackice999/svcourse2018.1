@@ -2,11 +2,14 @@
 
 namespace Course\Api\Model;
 
-use Course\Api\Exceptions\Precondition;
-use Course\Services\Authentication\Authentication;
+
+use Course\Services\Socket\Response;
 
 class JoinRoomEvent extends Event
 {
+
+    const name = "room_1";
+
     /**
      * StartGameEvent constructor.
      * @param object $data
@@ -26,10 +29,22 @@ class JoinRoomEvent extends Event
     public function handle()
     {
         $userId = $this->getUserModel()->id;
-        $roomModel = RoomModel::create($userId);
-        Room::addUser($userId);
-        if (Room::areThereAreEnoughUsers()) {
-            return \Course\Services\Socket\Response::getResponse(
+
+        if (!RoomModel::roomExists(JoinRoomEvent::name)) {
+            $roomModel = RoomModel::create(JoinRoomEvent::name);
+        } else {
+            $roomModel = RoomModel::getByRoomName(JoinRoomEvent::name);
+        }
+
+        RoomUsersModel::create($roomModel->id, $userId);
+
+        return Response::getResponse(
+            ResponseEvents::JOIN_ROOM,
+            '{"roomId":' . $roomModel->id . '}'
+        );
+
+        if (RoomUsersModel::areThereAreEnoughUsers($roomModel->id)) {
+            return Response::getResponse(
                 ResponseEvents::START_GAME,
                 '{"ok":true}'
             );

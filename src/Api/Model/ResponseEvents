@@ -9,8 +9,10 @@ class ResponseEvents
 {
 //    const AUTHORIZE = 'authorize';
     const START_GAME = 'startGame';
+    const JOIN_ROOM = "joinRoom";
     const ALLOWED_EVENTS = [
-        self::START_GAME
+        self::START_GAME,
+        self::JOIN_ROOM
     ];
     private static $room = null;
 

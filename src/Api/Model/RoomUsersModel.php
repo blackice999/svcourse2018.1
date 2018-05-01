@@ -10,16 +10,16 @@ use Course\Services\Persistence\MySql;
  * Active Record for the users table
  * @package Course\Api\Model
  */
-class RoomModel extends ActiveRecord
+class RoomUsersModel extends ActiveRecord
 {
     /**
      * @var array
      * Contains the database configuration used in the ActiveRecord parent
      */
     private static $config = [
-        ActiveRecord::CONFIG_TABLE_NAME => 'rooms',
+        ActiveRecord::CONFIG_TABLE_NAME => 'room_users',
         ActiveRecord::CONFIG_PRIMARY_KEYS => ['id'],
-        ActiveRecord::CONFIG_DB_COLUMNS => ['id', 'name'],
+        ActiveRecord::CONFIG_DB_COLUMNS => ['id', 'roomId', 'userId'],
     ];
 
     /**
@@ -40,30 +40,27 @@ class RoomModel extends ActiveRecord
     /**
      * Inserts a new record into the users table and returns the newly created user as a UserModel
      *
-     * @param string $name
+     * @param int $roomId
+     * @param int $userId
      * @return RoomModel
+     * @internal param string $name
      * @internal param int $userId
      */
-    public static function create(string $name): self
+    public static function create(int $roomId, int $userId): self
     {
-        $id = MySql::insert(self::getTableName(), ['name' => $name]);
+        $id = MySql::insert(self::getTableName(), ['roomId' => $roomId, 'userId' => $userId]);
         return self::loadById($id);
     }
 
-    public static function roomExists(string $name): bool
+    public static function areThereAreEnoughUsers(int $roomId): bool
     {
-        try {
-            MySql::getOne(self::getTableName(), ['name' => $name]);
-            return true;
-        } catch (NoResultsException $e) {
-            return false;
-        }
+        return count(MySql::getMany(self::getTableName(), ['roomId' => $roomId])) > 2;
     }
 
-    public static function getByRoomName(string $name): self
+
+    public static function isThereAtleastOneUser(int $roomId): bool
     {
-        $result = MySql::getOne(self::getTableName(), ['name' => $name]);
-        return new self($result);
+        return count(MySql::getMany(self::getTableName(), ['roomId' => $roomId])) > 1;
     }
 
     /**
